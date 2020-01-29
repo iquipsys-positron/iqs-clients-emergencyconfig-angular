@@ -1,0 +1,59 @@
+<pip-document>
+	<div class="pip-body lp24 rp24 tp16 bp24 layout-column flex">
+		<div class="text-title bp16">
+			{{ ::'EMERGENCY_PLAN_TITLE' | translate }} "{{ $ctrl.item.name }}"
+		</div>
+		<div ng-repeat="estep in $ctrl.item.steps track by $index">
+			<div class="layout-row layout-align-start-start">
+				<div class="flex-fixed" style="padding: 12px 0px; margin-right: 16px;">
+					<div class="color-primary-bg color-content" style="border-radius: 12px; width:24px; height: 24px; line-height: 24px; text-align: center">
+						{{ estep.index }}
+					</div>
+				</div>
+				<div class="flex tp16">
+					{{ estep.name }}
+				</div>
+			</div>
+			<div ng-repeat="action in estep.actions track by $index" style="margin-left: 40px;">
+				<!--note-->
+				<div class="tm8" ng-if="action.type == 'note' && action.params['text']">
+					{{ action.params['text'] }}
+				</div>
+				<!--phone-->
+				<div ng-if="action.type == 'call phone' && action.params['phone']">
+					{{ action.params['phone'] }}
+				</div>
+				<!--local link-->
+				<div ng-if="action.type == 'local link' && action.params['page']">
+					<md-button class="color-primary m0" ng-click="$ctrl.onPageClick(action.params['page'])" ng-if="action.params['pageTitle']">
+						{{ action.params['pageTitle'] | translate }}
+					</md-button>
+
+					<div class="tm8" ng-if="action.params['text']">
+						{{ action.params['text'] }}
+					</div>
+				</div>
+				<!--global link-->
+				<div ng-if="action.type == 'global link' && action.params['uri']">
+					{{ action.params['uri'] }}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="pip-footer " style="height: 86px">
+		<div class="pip-action-list w-stretch">
+			<md-button iqs-test-edit class="pip-action-list-item" xxxng-if="$ctrl.accessConfig.editEmergency" ng-click="$ctrl.onEdit()"
+			           ng-disabled="$ctrl.ngDisabled() || !$ctrl.accessConfig.editEmergency">
+
+				<md-icon class="pip-pic" md-svg-icon="icons:pen"></md-icon>
+				<div class="pip-title">{{ ::'EMERGENCY_PLAN_EDIT' | translate }}</div>
+			</md-button>
+			<md-button iqs-test-delete class="pip-action-list-item" xxxng-if="$ctrl.accessConfig.deleteEmergency" ng-click="$ctrl.onDelete()"
+			           ng-disabled="$ctrl.ngDisabled() || !$ctrl.accessConfig.deleteEmergency">
+
+				<md-icon class="pip-pic" md-svg-icon="icons:trash"></md-icon>
+				<div class="pip-title">{{ ::'EMERGENCY_PLAN_DELETE' | translate}}</div>
+			</md-button>
+		</div>
+	</div>
+</pip-document>

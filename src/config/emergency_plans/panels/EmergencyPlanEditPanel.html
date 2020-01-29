@@ -1,0 +1,146 @@
+<pip-document>
+	<div class="pip-body p24  layout-column flex">
+		<div ng-show="$ctrl.error" class="pip-page-errors">
+			<span class="pip-error-text color-error flex"> {{ $ctrl.error | translate }}</span>
+			<md-icon md-svg-icon="icons:warn-circle" class="color-error"></md-icon>
+		</div>
+
+		<form name="form" novalidate>
+
+			<md-input-container class="md-block bm0">
+				<label>{{ ::'EMERGENCY_PLAN_NAME_LABEL' | translate }}</label>
+				<textarea iqs-test-name ng-model="$ctrl.emergencyPlan.name" aria-label="NAME" md-select-on-focus ng-disabled="$ctrl.ngDisabled()">
+
+				</textarea>
+			</md-input-container>
+
+
+			<div class="iqs-ep-step" ng-repeat="estep in $ctrl.emergencyPlan.steps track by $index">
+				<div class="iqs-ep-step-controls layout-row layout-align-start-center flex bm16" style="height: 48px;">
+					<div class="flex" style="padding: 12px;">
+						<div class="color-primary-bg color-content" style="border-radius: 12px; width:24px; height: 24px; line-height: 24px; text-align: center">
+							{{ estep.index }}
+						</div>
+					</div>
+					<div class="flex-fixed">
+						<md-button class="md-icon-button m0" ng-click="$ctrl.moveDown($index)" ng-if="!$last">
+							<md-icon md-svg-icon="icons:chevron-down"></md-icon>
+						</md-button>
+					</div>
+					<div class="flex-fixed">
+						<md-button class="md-icon-button m0" ng-click="$ctrl.moveUp($index)" ng-if="!$first">
+							<md-icon md-svg-icon="icons:chevron-up"></md-icon>
+						</md-button>
+					</div>
+					<div class="flex-fixed">
+						<md-button class="md-icon-button m0" ng-click="$ctrl.deleteStep($index)">
+							<md-icon md-svg-icon="icons:cross"></md-icon>
+						</md-button>
+					</div>
+				</div>
+
+				<div class="iqs-ep-step-action" style="margin-left: 40px;">
+					<md-input-container class="md-block tm0 bm0">
+						<label>{{::'EMERGENCY_PLAN_STEP_NAME_LABEL' | translate }}</label>
+						<input iqs-test-step-name ng-model="estep.name" aria-label="STEP_NAME" ng-change="$ctrl.error=''" required
+						       ng-disabled="$ctrl.ngDisabled()" name="stepName" />
+
+						<div ng-messages="$ctrl.touchedErrorsWithHint($ctrl.form, $ctrl.form.stepName)" role="alert">
+							<div ng-if="!estep.name">{{ 'EMERGENCY_PLAN_STEP_NAME_REQUIRED_ERROR' | translate }}</div>
+						</div>
+					</md-input-container>
+				</div>
+
+				<div class="iqs-ep-step-action-details">
+					<div class="layout-row layout-align-start-start" ng-repeat="action in estep.actions track by $index" style="margin-left: 40px;">
+						<div class="flex-fixed" style="padding: 8px 24px 16px 0px;" id="details-section-{{estep.index + '-' + $index}}">
+							<div style="border-radius: 5px; background-color: black; width:10px; height: 10px;">
+								&nbsp;
+							</div>
+						</div>
+						<div class="flex">
+							<md-input-container class="md-block ">
+								<label>{{ ::'EMERGENCY_PLAN_STEP_DETAILS_TYPE_LABEL' | translate }}</label>
+								<md-select iqs-test-action-type class="flex" aria-label="SEVERITY" ng-model="action.type" ng-disabled="$ctrl.ngDisabled()">
+									<md-option iqs-test-option-action-type ng-repeat="actionType in $ctrl.epActionTypesCollection  track by $index"
+									           ng-value="actionType.id">
+										{{ actionType.title | translate }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+							<!--Note-->
+							<md-input-container class="md-block " ng-if="action.type == 'note'">
+								<label>{{ ::'EMERGENCY_PLAN_ACTION_NOTE_LABEL' | translate }}</label>
+								<textarea iqs-test-action-details-text ng-model="action.params['text']" aria-label="TEXT" md-select-on-focus
+								          ng-disabled="$ctrl.ngDisabled()">
+
+								</textarea>
+							</md-input-container>
+							<!--Call phone-->
+							<md-input-container class="md-block " ng-if="action.type == 'call phone'">
+								<label>{{ ::'EMERGENCY_PLAN_ACTION_PHONE_LABEL' | translate }}</label>
+								<input iqs-test-action-details-text ng-model="action.params['phone']" aria-label="PHONE" ng-change="$ctrl.error=''"
+								       ng-disabled="$ctrl.ngDisabled()" />
+							</md-input-container>
+							<!--Local link-->
+							<md-input-container class="md-block " ng-if="action.type == 'local link'">
+								<label>{{ ::'EMERGENCY_PLAN_ACTION_LOCAL_LINK_TYPE_LABEL' | translate }}</label>
+								<md-select iqs-test-action-page-select class="flex" aria-label="ACTION_PAGE" ng-model="action.params['page']"
+								           ng-disabled="$ctrl.ngDisabled()">
+									<md-option iqs-test-option-action-page ng-repeat="page in $ctrl.actionPagesCollection  track by $index"
+									           ng-value="page.id">
+										{{ page.title | translate }}
+									</md-option>
+								</md-select>
+							</md-input-container>
+
+							<md-input-container class="md-block " ng-if="action.type == 'local link'">
+								<label>{{ ::'EMERGENCY_PLAN_ACTION_LOCAL_LINK_LABEL' | translate }}</label>
+								<input iqs-test-action-details-text ng-model="action.params['text']" aria-label="DESCRIPTION" ng-change="$ctrl.error=''"
+								       ng-disabled="$ctrl.ngDisabled()" />
+							</md-input-container>
+							<!--Global link-->
+							<md-input-container class="md-block" ng-if="action.type == 'global link'">
+								<label>{{ ::'EMERGENCY_PLAN_ACTION_GLOBAL_LINK_LABEL' | translate }}</label>
+								<input iqs-test-action-details-text ng-model="action.params['uri']" aria-label="URI" ng-change="$ctrl.error=''"
+								       ng-disabled="$ctrl.ngDisabled()" />
+							</md-input-container>
+						</div>
+						<div class="flex-fixed">
+							<md-button class="md-icon-button m0" ng-click="$ctrl.deleteAction(estep, $index)">
+								<md-icon md-svg-icon="icons:cross"></md-icon>
+							</md-button>
+						</div>
+					</div>
+					<div class="iqs-ep-step-action-details-button flex" style="margin-left: 40px;">
+						<md-button iqs-test-action-details class="md-raised w-stretch m0" ng-click="$ctrl.onAddActionDetails(estep)"
+						           ng-disabled="$ctrl.ngDisabled()">
+							{{ ::'EMERGENCY_PLAN_STEP_ADD_DETAILS_BUTTON' | translate }}
+						</md-button>
+					</div>
+				</div>
+
+			</div>
+			<div class="iqs-ep-step-action-button tm24 flex">
+				<md-button iqs-test-action id="add-action" class="md-raised w-stretch m0" ng-click="$ctrl.onAddAction()"
+				           ng-disabled="$ctrl.ngDisabled()">
+					{{ ::'EMERGENCY_PLAN_STEP_ADD_STEP_BUTTON' | translate }}
+				</md-button>
+			</div>
+
+		</form>
+	</div>
+	<div class="pip-footer " style="height: 86px">
+		<div class="pip-action-list w-stretch">
+			<md-button iqs-test-save class="pip-action-list-item" ng-click="$ctrl.onSaveClick()" ng-disabled="$ctrl.ngDisabled() || !$ctrl.emergencyPlan.name">
+				<md-icon class="pip-pic" md-svg-icon="icons:check"></md-icon>
+				<div class="pip-title">{{::'EMERGENCY_PLAN_SAVE' | translate }}</div>
+			</md-button>
+			<md-button iqs-test-cancel class="pip-action-list-item" ng-click="$ctrl.onCancelClick()" ng-disabled="$ctrl.ngDisabled()">
+				<md-icon class="pip-pic" md-svg-icon="icons:cross"></md-icon>
+				<div class="pip-title">{{::'EMERGENCY_PLAN_CANCEL' | translate}}</div>
+			</md-button>
+		</div>
+	</div>
+</pip-document>
