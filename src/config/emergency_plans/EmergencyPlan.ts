@@ -364,6 +364,7 @@ function configureConfigEmergencyPlansAccess(
         .module('iqsConfigEmergencyPlans', [
             'pipNav', 'iqsEmergencyPlans.ViewModel',
 
+            'iqsAccessConfig',
             'iqsEmergencyPlanPanel',
             'iqsEmergencyPlanEmptyPanel',
             'iqsEmergencyPlanEditPanel',
